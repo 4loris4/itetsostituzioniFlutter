@@ -142,7 +142,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
                   text: new TextSpan(
                     children: [
                       new TextSpan(text: updateDay),
-                      downloadError ? new TextSpan(text: "\nLe sostituzioni potrebbero non essere aggiornate", style: new TextStyle(color: Colors.red)) : new TextSpan(),
+                      downloadError ? new TextSpan(text: "\nLe sostituzioni potrebbero non essere aggiornate", style: new TextStyle(fontWeight: FontWeight.bold, color: Colors.red)) : new TextSpan(),
                     ]
                   ),
               ),
