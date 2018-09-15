@@ -81,7 +81,7 @@ bool classeExists(String classe){
 
 Future<Null> loadData() async {
   //Ottiene i percorsi dei file e delle directory, carica i vari file
-  print("Getting directory and files locations");
+  print("Getting directory and files locations...");
   dir = await getApplicationDocumentsDirectory();
   sostituzioniFile = new File(dir.path + "/" + sostituzioniFileName);
   docentiFile = new File(dir.path + "/" + docentiFileName);
@@ -98,7 +98,6 @@ Future<Null> loadData() async {
 
   //Carica sostituzioni da file
   if(sostituzioniFile.existsSync()){
-    print("sostituzioniFile found, reading...");
     datiSostituzioni = json.decode(sostituzioniFile.readAsStringSync());
 
     day = "Sostituzioni di " + datiSostituzioni["data_stringa"];
@@ -150,12 +149,11 @@ Future<Null> loadData() async {
     }
   }
   else{
-    print("No sostituzioniFile available");
+    print("Local file 'sostituzioni' not found");
   }
 
   //Carica lista docenti da file
   if(docentiFile.existsSync()){
-    print("docentiFile found, reading...");
     datiDocenti = json.decode(docentiFile.readAsStringSync());
 
     docenti.clear();
@@ -168,12 +166,11 @@ Future<Null> loadData() async {
       );
   }
   else{
-    print("No docentiFile available");
+    print("Local file 'docenti' not found");
   }
 
   //Carica lista classi da file
   if(classiFile.existsSync()){
-    print("classiFile found, reading...");
     datiClassi = json.decode(classiFile.readAsStringSync());
 
     classi.clear();
@@ -186,7 +183,7 @@ Future<Null> loadData() async {
       );
   }
   else{
-    print("No classiFile available");
+    print("Local file 'classi' not found");
   }
 
   // ignore: invalid_use_of_protected_member
@@ -261,7 +258,7 @@ Future<bool> getData() async {
   if(responseSostituzioni==null){ //Controlla se la lista delle sostituzioni è stata scaricata correttamente
     if(settings["role"]=="Studente" && sostituzioniClassi.length==0 || (settings["user"]!=null && sostituzioniClassi.length==1) || (settings["role"]=="Docente" && sostituzioni.length==0 || (settings["user"]!=null && sostituzioni.length==1))) //Non è stato possibile scaricare le sostituzioni
       dataError=true;
-    print("Error when downloading sostituzioni");
+    print("Error while downloading file 'sostituzioni'");
   }
   else{
     datiSostituzioni = json.decode(responseSostituzioni.body);
@@ -313,14 +310,14 @@ Future<bool> getData() async {
           )
       );
     }
-    print("sostituzioni downloaded successfully, saving to file...");
+    print("File 'sostituzioni' downloaded successfully");
     saveToFile(sostituzioniFile, json.encode(datiSostituzioni));
   }
 
   if(responseDocenti==null){ //Controlla se la lista dei docenti è stata scaricata correttamente
     if(docenti.length==0) //Non è stato possibile scaricare la lista dei docenti
       dataError=true;
-    print("Error when downloading docenti");
+    print("Error while downloading file 'docenti'");
   }
   else{
     datiDocenti = json.decode(responseDocenti.body);
@@ -333,14 +330,14 @@ Future<bool> getData() async {
               child: new Text(capitalize(docente["Docente"]))
           )
       );
-    print("docenti downloaded successfully, saving to file...");
+    print("File 'docenti' downloaded successfully");
     saveToFile(docentiFile, json.encode(datiDocenti));
   }
 
   if(responseClassi==null){ //Controlla se la lista delle classi è stata scaricata correttamente
     if(classi.length==0) //Non è stato possibile scaricare la lista delle classi
       dataError=true;
-    print("Error when downloading classi");
+    print("Error while downloading file 'classi'");
   }
   else{
     datiClassi = json.decode(responseClassi.body);
@@ -353,7 +350,7 @@ Future<bool> getData() async {
               child: new Text(classe["Classe"])
           )
       );
-    print("classi downloaded successfully, saving to file...");
+    print("File 'classi' downloaded successfully");
     saveToFile(classiFile, json.encode(datiClassi));
   }
 

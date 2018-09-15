@@ -102,7 +102,10 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
     else {
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text(day, style: new TextStyle(fontSize: 18.0)),
+          title: new FittedBox(
+              child: new Text(day, style: new TextStyle(fontSize: 18.0)),
+              fit: BoxFit.scaleDown
+          ),
           backgroundColor: Colors.blueGrey,
           bottom: new TabBar(
             indicatorColor: Colors.lightBlueAccent,
