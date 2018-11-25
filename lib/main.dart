@@ -6,7 +6,7 @@ import './tabs/sostituzioni_personal.dart';
 import './tabs/settings.dart';
 import 'globals.dart';
 
-void main() => runApp(new MaterialApp(home: new MyTabs()));
+void main() => runApp(new MaterialApp(home: new MyTabs(), debugShowCheckedModeBanner: false));
 
 MyTabsState appState = new MyTabsState();
 
