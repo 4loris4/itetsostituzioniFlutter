@@ -42,13 +42,15 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
 
     firebaseMessaging.configure(
       onLaunch: (Map<String, dynamic> msg) {
-        print("onLaunch called");
+        print("onLaunch called (notification)");
       },
-      onMessage: (Map<String, dynamic> msg) {
-        print("onMessage called");
+      onMessage: (Map<String, dynamic> msg) async {
+        await getData();
       },
       onResume: (Map<String, dynamic> msg) {
-        print("onResume called");
+        showDialog(context: context, builder: (BuildContext context) {
+          print("onResume called (notification)");
+        });
       }
     );
 
@@ -64,9 +66,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
       print("iOS Settings registered");
     });
 
-    firebaseMessaging.getToken().then((token){
-      print(token);
-    });
+    firebaseMessaging.subscribeToTopic("all");
   }
 
   @override
@@ -153,9 +153,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
           actions: <Widget>[
             new IconButton(
               icon: new Icon(Icons.settings),
-              onPressed: () =>
-                  Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new Settings())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Settings())),
             )
           ],
         ),

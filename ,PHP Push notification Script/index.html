@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Prova notifiche</title>
+        <script>
+            function sendMessage() {
+                var text = document.getElementsByTagName("input")[0].value;
+                var num = document.getElementsByTagName("input")[1].value;
+                location.href = "notification.php?text="+text+"&n="+(num?num:1);
+            }
+        </script>
+    </head>
+    <body>
+        <input type="text" placeholder="Descrizione notifica">
+        <input type="number" placeholder="Numero notifiche">
+        <button onclick="sendMessage()">Invia messaggio</button>
+    </body>
+</html>
