@@ -5,6 +5,7 @@ import './tabs/sostituzioni_general.dart';
 import './tabs/sostituzioni_personal.dart';
 import './tabs/settings.dart';
 import 'globals.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() => runApp(new MaterialApp(home: new MyTabs(), debugShowCheckedModeBanner: false));
 
@@ -18,6 +19,8 @@ class MyTabs extends StatefulWidget{
 TabController controller;
 
 class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
+
+  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 
   @override
   void initState() {
@@ -35,6 +38,34 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
         Future.delayed(new Duration(milliseconds: 250)).then((onValue){
           controller.animateTo(0);
         });
+    });
+
+    firebaseMessaging.configure(
+      onLaunch: (Map<String, dynamic> msg) {
+        print("onLaunch called");
+      },
+      onMessage: (Map<String, dynamic> msg) {
+        print("onMessage called");
+      },
+      onResume: (Map<String, dynamic> msg) {
+        print("onResume called");
+      }
+    );
+
+    firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(
+        sound: true,
+        alert: true,
+        badge: true
+      )
+    );
+    
+    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings){
+      print("iOS Settings registered");
+    });
+
+    firebaseMessaging.getToken().then((token){
+      print(token);
     });
   }
 

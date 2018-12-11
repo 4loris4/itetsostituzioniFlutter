@@ -53,7 +53,11 @@ class SostituzioniPersonalState extends State<SostituzioniPersonal>{
     if(settings["user"]!=null && (((settings["role"]=="Studente" && sostituzioniClassi.indexWhere((sostituzione)=>sostituzione.classe==settings["user"])==-1)||(settings["role"]=="Docente" && sostituzioni.indexWhere((sostituzione)=>sostituzione.profSostituto==settings["user"])==-1)) || (dataError && ((settings["role"]=="Studente" && sostituzioniClassi.length<=1) || (settings["role"]=="Docente" && sostituzioni.length<=1))))){
       return new Scaffold(
         appBar: new AppBar(backgroundColor: Colors.blueGrey, title: new Center(
-            child: new Text(settings["role"]=="Studente" ? "Sostituzioni della classe " + settings["user"] : "Sostituzioni di " + settings["user"]))
+            child: new FittedBox(
+                child: new Text(settings["role"]=="Studente" ? "Sostituzioni della classe " + settings["user"] : "Sostituzioni di " + settings["user"]),
+                fit: BoxFit.scaleDown
+            ),
+          )
         ),
         body: new Stack(
             children: <Widget>[

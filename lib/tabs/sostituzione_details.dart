@@ -21,8 +21,10 @@ class StateSostituzioneDetails extends State<SostituzioneDetails> {
       return new Scaffold(
         appBar: new AppBar(
           backgroundColor: Colors.blueGrey,
-          title: new Text(
-              "Sostituzioni della classe " + sostituzioniClassi[widget.index].classe),
+          title: new FittedBox(
+              child: new Text("Sostituzioni della classe " + sostituzioniClassi[widget.index].classe),
+              fit: BoxFit.scaleDown
+          ),
         ),
         body: new Stack(
           children: <Widget>[
@@ -83,8 +85,10 @@ class StateSostituzioneDetails extends State<SostituzioneDetails> {
       return new Scaffold(
         appBar: new AppBar(
           backgroundColor: Colors.blueGrey,
-          title: new Text(
-              "Sostituzioni di " + sostituzioni[widget.index].profSostituto),
+          title: new FittedBox(
+              child: new Text("Sostituzioni di " + sostituzioni[widget.index].profSostituto),
+              fit: BoxFit.scaleDown
+          ),
         ),
         body: new Stack(
           children: <Widget>[
