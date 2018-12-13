@@ -379,6 +379,11 @@ Future<bool> getData() async {
       controller.animateTo(0);
   });
 
+  // ignore: invalid_use_of_protected_member
+  appState.setState((){
+    loadingIndicator = false;
+  });
+
   if(downloadError) {
     Scaffold.of(snackbarContext).showSnackBar(new SnackBar(
       content: new Text("Impossibile aggiornare i dati.\nVerifica la tua connessione ad Internet o riprova più tardi."),

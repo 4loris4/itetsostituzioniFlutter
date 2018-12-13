@@ -17,6 +17,7 @@ class MyTabs extends StatefulWidget{
 }
 
 TabController controller;
+bool loadingIndicator = true;
 
 class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
 
@@ -32,11 +33,13 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
     });
 
     loadData().then((onValue){
-      getData();
-      if(docenteExists(settings["user"]))
-        Future.delayed(new Duration(milliseconds: 250)).then((onValue){
-          controller.animateTo(0);
+      getData().then((onValue){
+        Future.delayed(new Duration(milliseconds: 500)).then((onValue) {
+          if(docenteExists(settings["user"])) {
+            controller.animateTo(0);
+          }
         });
+      });
     });
 
     initFirebase();
@@ -136,15 +139,24 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
             new IconButton(
               icon: new Icon(Icons.settings),
               onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Settings())),
-            )
+            ),
           ],
         ),
-        body: new TabBarView(
-            controller: controller,
-            children: <Widget>[
-              new SostituzioniPersonal(),
-              new SostituzioniGeneral(),
-            ]
+        body: new Stack(
+          children: <Widget>[
+            new TabBarView(
+              controller: controller,
+              children: <Widget>[
+                new SostituzioniPersonal(),
+                new SostituzioniGeneral(),
+              ]
+            ),
+            new AnimatedOpacity(
+              opacity: loadingIndicator ? 1 : 0,
+              duration: Duration(milliseconds: 250),
+              child: new IgnorePointer(ignoring: !loadingIndicator, child: new Material(color: Colors.black26, child: new Center(child: new CircularProgressIndicator()))),
+            ),
+          ],
         ),
         bottomNavigationBar: new Builder(builder: (BuildContext context2) {
           snackbarContext = context2;
