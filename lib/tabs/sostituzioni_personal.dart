@@ -45,6 +45,7 @@ class SostituzioniPersonalState extends State<SostituzioniPersonal>{
     setState(() {
       saveToFile(settingsFile, json.encode(settings));
     });
+    updateDatabaseInformation();
     dropdownValue = null;
   }
 

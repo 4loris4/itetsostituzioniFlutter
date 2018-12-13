@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import './main.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<SostituzioneDocente> sostituzioni = new List();
 List<SostituzioneClasse> sostituzioniClassi = new List();
@@ -25,6 +26,7 @@ File sostituzioniFile;
 File docentiFile;
 File classiFile;
 File settingsFile;
+String token;
 final String sostituzioniFileName = "sostituzioniITET.json";
 final String docentiFileName = "docentiITET.json";
 final String classiFileName = "classiITET.json";
@@ -79,6 +81,7 @@ bool classeExists(String classe){
   return false;
 }
 
+
 Future<Null> loadData() async {
   //Ottiene i percorsi dei file e delle directory, carica i vari file
   print("Getting directory and files locations...");
@@ -116,8 +119,7 @@ Future<Null> loadData() async {
         noSostituzioni=true;
         break;
       }
-      if(sostituzioni.indexWhere((sostituzione) => sostituzione.profSostituto == sostituzioneJSON["Prof_Sostituto"])==-1)
-        sostituzioni.add(new SostituzioneDocente(sostituzioneJSON["Prof_Sostituto"])); //Se non esiste ancora un oggetto per il prof sostituto, creane uno
+      if(sostituzioni.indexWhere((sostituzione) => sostituzione.profSostituto == sostituzioneJSON["Prof_Sostituto"])==-1) sostituzioni.add(new SostituzioneDocente(sostituzioneJSON["Prof_Sostituto"])); //Se non esiste ancora un oggetto per il prof sostituto, creane uno
       sostituzioni[sostituzioni.indexWhere((sostituzione) => sostituzione.profSostituto == sostituzioneJSON["Prof_Sostituto"])]
           .addSostituzione( //Aggiungi la sostituzione all'oggetto del prof sostituto
           new Sostituzione(
@@ -385,4 +387,17 @@ Future<bool> getData() async {
     return false;
   }
   return true;
+}
+
+void updateDatabaseInformation() {
+  if(token == null) { return; }
+
+  Firestore.instance.collection("users").where("token", isEqualTo: token).snapshots().listen((databaseData){
+    if(databaseData.documents.length==0) { //Token doesn't exist in database
+      Firestore.instance.collection("users").add({"token":token,"docente":settings["role"]=="Docente","user":settings["user"]});
+    }
+    else { //Token already exists in database
+      databaseData.documents[0].reference.updateData({"docente":settings["role"]=="Docente","user":settings["user"]});
+    }
+  });
 }

@@ -18,18 +18,18 @@ function sendPushNotification($to = "", $data = array()) {
     return json_decode($result, true);
 }
 
-$n = $_GET["n"];
 $to = "/topics/all";
 $data = array(
-    //'title' => 'title',
     "body" => $_GET["text"]
 );
-//print_r(sendPushNotification($to,$data));
-for($i = 0; $i < $n; $i++) {
-    sendPushNotification($to,$data);
+
+sendPushNotification($to,$data);
+
+foreach($_POST as $post_var) {
+    echo $post_var."<br>";
 }
 
-Header("Location: index.html");
+//Header("Location: index.html");
 
 //virtuale
 //c3J5PykqIWw:APA91bGwwOR_iavTsypUVc2DMn6euN3VED-9_8Kbl9S_zKSMOt0_V76X0hZ5UbkHYPhsEvl8FuBB5Ot9ykwv6gW7QV_I4_3RXKhuUSsIJiW8Pm66B48Pih7IO4ZrLeDqMQ1cXBIjRutB

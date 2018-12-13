@@ -20,16 +20,15 @@ TabController controller;
 
 class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
 
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-
   @override
   void initState() {
     super.initState();
     controller = new TabController(length: 2, vsync: this);
     controller.index=1;
     controller.addListener((){
-      if(controller.index==0)
+      if(controller.index==0) {
         personalVisited = true;
+      }
     });
 
     loadData().then((onValue){
@@ -40,33 +39,16 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
         });
     });
 
-    firebaseMessaging.configure(
-      onLaunch: (Map<String, dynamic> msg) {
-        print("onLaunch called (notification)");
-      },
-      onMessage: (Map<String, dynamic> msg) async {
-        await getData();
-      },
-      onResume: (Map<String, dynamic> msg) {
-        showDialog(context: context, builder: (BuildContext context) {
-          print("onResume called (notification)");
-        });
-      }
-    );
+    initFirebase();
+  }
 
-    firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(
-        sound: true,
-        alert: true,
-        badge: true
-      )
-    );
-    
-    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings){
-      print("iOS Settings registered");
-    });
-
-    firebaseMessaging.subscribeToTopic("all");
+  void initFirebase() async {
+    FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+    firebaseMessaging.configure( onLaunch: (Map<String, dynamic> msg) { print("onLaunch called (notification)"); }, onMessage: (Map<String, dynamic> msg) async { await getData(); }, onResume: (Map<String, dynamic> msg) { print("onResume called (notification)"); });
+    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, alert: true, badge: true ));
+    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings){ print("iOS Settings registered"); });
+    token = await firebaseMessaging.getToken();
+    updateDatabaseInformation();
   }
 
   @override

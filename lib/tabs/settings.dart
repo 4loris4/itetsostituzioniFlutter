@@ -56,6 +56,7 @@ class SettingsState extends State<Settings> {
       saveToFile(settingsFile, json.encode(settings));
     });
 
+    updateDatabaseInformation();
     Scaffold.of(snackbarContextSettings).showSnackBar(new SnackBar(
       content: new Text("Impostazioni salvate."),
       duration: Duration(milliseconds: 750),
@@ -72,6 +73,7 @@ class SettingsState extends State<Settings> {
       saveToFile(settingsFile, json.encode(settings));
     });
 
+    updateDatabaseInformation();
     Scaffold.of(snackbarContextSettings).showSnackBar(new SnackBar(
       content: new Text("Impostazioni salvate."),
       duration: Duration(milliseconds: 750),
