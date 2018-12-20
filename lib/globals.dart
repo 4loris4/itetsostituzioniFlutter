@@ -395,7 +395,7 @@ Future<bool> getData() async {
 }
 
 void updateDatabaseInformation() {
-  if(token == null) { return; }
+  //if(token == null) { return; }
 
   Firestore.instance.collection("users").where("token", isEqualTo: token).snapshots().listen((databaseData){
     if(databaseData.documents.length==0) { //Token doesn't exist in database
