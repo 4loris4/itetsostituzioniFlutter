@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:782192583968:android:e8c6655139b7a9b3",
+        "android_client_info": {
+          "package_name": "com.itetpilati.itetsostituzioni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782192583968-4o6fas2ovr0qf83dji99tb00b0hu7evq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaJ6jT-BUF07pqLHvmJgealtd5GAZpr5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782192583968-4o6fas2ovr0qf83dji99tb00b0hu7evq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:782192583968:android:7cb2a775914c6c63",
         "android_client_info": {
           "package_name": "com.itetpilati.itetsostituzioni"
@@ -33,20 +62,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "782192583968-4o6fas2ovr0qf83dji99tb00b0hu7evq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

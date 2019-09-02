@@ -1,182 +1,195 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import './tabs/sostituzioni_general.dart';
-import './tabs/sostituzioni_personal.dart';
-import './tabs/settings.dart';
-import 'globals.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:itetsostituzioni/Globals.dart';
+import 'package:itetsostituzioni/Tabs/ImpostazioniTab.dart';
+import 'package:itetsostituzioni/Tabs/SostituzioniTab.dart';
+import 'package:itetsostituzioni/Tabs/SostituzioniDetailsTab.dart';
 
-void main() => runApp(new MaterialApp(home: new MyTabs(), debugShowCheckedModeBanner: false));
+void main() => runApp(MaterialApp(home: App()));
 
-MyTabsState appState = new MyTabsState();
+class App extends StatefulWidget {
+  const App({Key key}) : super(key: key);
 
-class MyTabs extends StatefulWidget{
   @override
-  MyTabsState createState() => appState;
+  AppState createState() => AppState();
 }
 
-TabController controller;
-bool loadingIndicator = true;
+GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin{
+class AppState extends State<App> with SingleTickerProviderStateMixin {
+  TabController tabController;
+
+  void docenteChosen(bool docente) {
+    settings["docente"] = docente;
+    reloadSostituzioni();
+
+    writeFile(settingsFileName, jsonEncode(settings));
+    updateDatabaseInformation();
+  }
+
+  void reloadSostituzioni() {
+    loadSostituzioni(false).then((_) {
+      setState(() {});
+    });
+  }
+
+  Future<bool> mainLoadSostituzioni() {
+    setState(() { isRefreshing = true; });
+    Future<bool> loading = loadSostituzioni(true);
+    loading.then((error) {
+      setState(() {
+        isRefreshing = false;
+        downloadError = error;
+      });
+      if(error && settings["docente"] != null) {
+        scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Impossibile aggiornare i dati.\nVerifica la tua connessione ad Internet o riprova più tardi."),
+            duration: Duration(milliseconds: 4000)
+        ));
+      }
+    });
+    return loading;
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = new TabController(length: 2, vsync: this);
-    controller.index=1;
-    controller.addListener((){
-      if(controller.index==0) {
-        personalVisited = true;
-      }
+    tabController = TabController(length: 2, vsync: this);
+    tabController.index = 1;
+
+    loadData().then((_) {
+      tabController.index = settings["user"] != null ? 0 : tabController.index;
+      hasLoaded = true;
+      mainLoadSostituzioni();
+      updateDatabaseInformation();
     });
 
-    loadData().then((onValue){
-      getData().then((onValue){
-        Future.delayed(new Duration(milliseconds: 500)).then((onValue) {
-          if(docenteExists(settings["user"])) {
-            controller.animateTo(0);
-          }
-        });
-      });
-    });
-
-    initFirebase();
-  }
-
-  void initFirebase() async {
-    FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-    firebaseMessaging.configure( onLaunch: (Map<String, dynamic> msg) { print("onLaunch called (notification)"); }, onMessage: (Map<String, dynamic> msg) async { await getData(); }, onResume: (Map<String, dynamic> msg) { print("onResume called (notification)"); });
-    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, alert: true, badge: true ));
-    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings){ print("iOS Settings registered"); });
-    token = await firebaseMessaging.getToken();
-    updateDatabaseInformation();
+    messaging.configure( onMessage: (Map<String, dynamic> msg) async => mainLoadSostituzioni());
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(settings["role"]==null){
-      return new Scaffold(
-          body: new Center(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Text("Benvenuto nell'app!", textAlign: TextAlign.center,
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 30.0)),
-                new Padding(padding: new EdgeInsets.only(top: 20.0)),
-                new Text(
-                    "Prima di iniziare, scegli se vuoi utilizzare l'app\ncome studente o come docente.",
-                    textAlign: TextAlign.center,
-                    style: new TextStyle(fontSize: 16.0)
-                ),
-                new Padding(
-                  padding: new EdgeInsets.symmetric(vertical: 7.5),
-                ),
-                new Text(
-                    "Potrai cambiare nuovamente questa\nopzione nelle impostazioni.",
-                    textAlign: TextAlign.center,
-                    style: new TextStyle(fontSize: 13.0)),
-                new Padding(
-                  padding: new EdgeInsets.symmetric(vertical: 30.0),
-                ),
-                new RaisedButton(
-                  child: new Text("Sono uno studente", style: new TextStyle(fontSize: 16.0)),
-                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
-                  onPressed: (){
-                    setState(() {
-                      settings["role"]="Studente";
-                      saveToFile(settingsFile, json.encode(settings));
-                    });
-                  }
-                ),
-                new Padding(
-                  padding: new EdgeInsets.symmetric(vertical: 7.5),
-                ),
-                new RaisedButton(
-                  child: new Text("Sono un docente", style: new TextStyle(fontSize: 16.0)),
-                  padding: EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
-                  onPressed: (){
-                    setState(() {
-                      settings["role"]="Docente";
-                      saveToFile(settingsFile, json.encode(settings));
-                    });
-                  }
-                )
-              ],
+    Widget child = Scaffold(
+      appBar: AppBar(
+        title: FittedBox(
+          child: Text(sostituzioniDate),
+          fit: BoxFit.scaleDown,
+        ),
+        backgroundColor: blue,
+        actions: <Widget>[
+          IconButton(
+            tooltip: "Impostazioni",
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ImpostazioniTab())),
+          )
+        ],
+        bottom: TabBar(
+          controller: tabController,
+          indicatorColor: Colors.white,
+          tabs: <Widget>[
+            Tab(text: settings["docente"] == false ? "LA MIA CLASSE" : "LE MIE SOSTITUZIONI"),
+            Tab(text: settings["docente"] == false ? "TUTTE LE CLASSI" : "TUTTE LE SOSTITUZIONI"),
+          ],
+        ),
+      ),
+      body: Stack(
+        children: <Widget>[
+          TabBarView(
+            controller: tabController,
+            children: <Widget>[
+              SostituzioniDetailsTab(app: this, personal: true),
+              SostituzioniTab(app: this),
+            ],
+          ),
+          IgnorePointer(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              key: scaffoldKey,
             ),
+          )
+        ]
+      ),
+      bottomNavigationBar: sostituzioniTimestamp != "" ? Material(
+        color: blue,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 2.5),
+          child: RichText(
+            text: TextSpan(children: <TextSpan>[
+              TextSpan(text: downloadError ? "Le sostituzioni potrebbero non essere aggiornate\n" : "", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              TextSpan(text: sostituzioniTimestamp, style: TextStyle(color: Colors.white)),
+            ]),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ) : null,
+    );
+
+    if(settings["docente"] == null) {
+      child = Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("Benvenuto nell'app!",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+              Divider(height: 20, color: Colors.transparent),
+              Text(
+                  "Prima di iniziare, scegli se vuoi utilizzare l'app\ncome studente o come docente.",
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+              Divider(height: 15, color: Colors.transparent),
+              Text(
+                  "Potrai cambiare nuovamente questa opzione\nnelle impostazioni (in alto a destra).",
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
+              Divider(height: 60, color: Colors.transparent),
+              IntrinsicWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    RaisedButton(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: Text("Sono un docente"),
+                      onPressed: () => docenteChosen(true),
+                    ),
+                    Divider(height: 15, color: Colors.transparent),
+                    RaisedButton(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: Text("Sono uno studente"),
+                      onPressed: () => docenteChosen(false),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           )
       );
     }
-    else {
-      return new Scaffold(
-        appBar: new AppBar(
-          title: new FittedBox(
-              child: new Text(day, style: new TextStyle(fontSize: 18.0)),
-              fit: BoxFit.scaleDown
-          ),
-          backgroundColor: Colors.blueGrey,
-          bottom: new TabBar(
-            indicatorColor: Colors.lightBlueAccent,
-            controller: controller,
-            tabs: <Tab>[
-              new Tab(text: settings["role"] == "Studente"
-                  ? "LA MIA CLASSE"
-                  : "LE MIE SOSTITUZIONI"),
-              new Tab(text: settings["role"] == "Studente"
-                  ? "TUTTE LE CLASSI"
-                  : "TUTTE LE SOSTITUZIONI"),
-            ],
-          ),
-          actions: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.settings),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Settings())),
-            ),
-          ],
-        ),
-        body: new Stack(
-          children: <Widget>[
-            new TabBarView(
-              controller: controller,
-              children: <Widget>[
-                new SostituzioniPersonal(),
-                new SostituzioniGeneral(),
-              ]
-            ),
-            new AnimatedOpacity(
-              opacity: loadingIndicator ? 1 : 0,
-              duration: Duration(milliseconds: 250),
-              child: new IgnorePointer(ignoring: !loadingIndicator, child: new Material(color: Colors.black26, child: new Center(child: new CircularProgressIndicator()))),
-            ),
-          ],
-        ),
-        bottomNavigationBar: new Builder(builder: (BuildContext context2) {
-          snackbarContext = context2;
-          return new Material(
-            child: new Padding(
-              padding: EdgeInsets.symmetric(vertical: 2.5),
-              child: new RichText(
-                textAlign: TextAlign.center,
-                  text: new TextSpan(
-                    children: [
-                      new TextSpan(text: updateDay),
-                      downloadError ? new TextSpan(text: "\nLe sostituzioni potrebbero non essere aggiornate", style: new TextStyle(fontWeight: FontWeight.bold, color: Colors.red)) : new TextSpan(),
-                    ]
-                  ),
+
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          child,
+          AnimatedOpacity(
+            opacity: hasLoaded ? 0 : 1,
+            duration: Duration(milliseconds: 500),
+            child: IgnorePointer(
+              ignoring: hasLoaded,
+              child: Stack(
+                children: <Widget>[
+                  Column(children: <Widget>[Expanded(child: Container(color: Colors.white))]),
+                  Center(child: Image.asset("images/logo.png", width: 250, fit: BoxFit.scaleDown))
+                ],
               ),
-            ),
-            color: Colors.blueGrey,
-          );
-        }),
-      );
-    }
+            )
+          )
+        ],
+      ),
+    );
   }
 }
