@@ -9,7 +9,7 @@ import 'dart:io';
 import 'dart:ui';
 
 const Color blue = Color(0xFF5dade2);
-const String downloadURL = "http://itetsostituzionitest.altervista.org";
+const String downloadURL = "http://istitutopilati.it/gestione_sostituzioni";
 final FirebaseMessaging messaging = FirebaseMessaging();
 bool hasLoaded = false;
 bool isRefreshing = false;
