@@ -1,7 +1,7 @@
 name: itetsostituzioni
 description: Applicazione dell&#x27;Istituto Pilati per le sostituzioni dei professori.
 
-version: 2.0.1+0
+version: 2.0.1+6
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
