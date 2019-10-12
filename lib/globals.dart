@@ -118,6 +118,16 @@ Future<bool> loadSostituzioni(bool download) async {
         }
       }
 
+      if(settings["user"] != null) {
+        for(SostituzioniUser sostituzioneUser in sostituzioni) {
+          if(sostituzioneUser.user != settings["user"] && sostituzioneUser.user.contains(settings["user"])) {
+            for(Sostituzione sostituzione in sostituzioneUser.sostituzioni) {
+              sostituzioni[0].add(sostituzione);
+            }
+          }
+        }
+      }
+
       //ITP
       itp1 = sostituzioniJSON["itp1"];
       itp2 = sostituzioniJSON["itp2"];
