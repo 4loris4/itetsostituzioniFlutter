@@ -1,0 +1,27 @@
+{
+    "cSpell.words": [
+        "fullscreen",
+        "itet",
+        "itetpilati",
+        "itetsostituzioni",
+        "riverpod"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        ".vscode": true,
+        ".dart_tool": true,
+        ".idea": true,
+        "build": true,
+        "radioanaunia.iml": true,
+        ".flutter-plugins": true,
+        ".flutter-plugins-dependencies": true,
+        "lib/generated_plugin_registrant.dart": true,
+        ".metadata": true,
+        "pubspec.lock": true,
+    }
+}

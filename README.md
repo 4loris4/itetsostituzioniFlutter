@@ -1,3 +1,3 @@
-# itetsostituzioni
+# ITET Sostituzioni
 
-Applicazione dell&#x27;Istituto Pilati per le sostituzioni dei professori.
+Applicazione dell'Istituto Pilati per le sostituzioni dei professori.
