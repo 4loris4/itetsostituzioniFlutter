@@ -3,21 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:itet_sostituzioni/data/shared_preferences.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/pages/substitutions/sostituzioni_page.dart';
-import 'package:itet_sostituzioni/pages/welcome_page.dart';
-import 'package:itet_sostituzioni/themes.dart';
+import 'package:itetsostituzioni/data/shared_preferences.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/pages/substitutions/sostituzioni_page.dart';
+import 'package:itetsostituzioni/pages/welcome_page.dart';
+import 'package:itetsostituzioni/themes.dart';
 
-//TODO check android files
-//TODO CHECK PACKAGE NAME!
-//TODO signing, apk, aab
-//TODO splash screen + dark mode
-//TODO icon (check if centered against old one)
+//TODO apk, aab
 //TODO timeout?
 //TODO settings theme
 //TODO check api level... (old and new app)
-//TODO check internet permission
 
 late final SharedPreferences prefs;
 

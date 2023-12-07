@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:itet_sostituzioni/data/classes.dart';
-import 'package:itet_sostituzioni/data/teachers.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/ui/app_bar_fix.dart';
-import 'package:itet_sostituzioni/ui/dropdown_form_field.dart';
+import 'package:itetsostituzioni/data/classes.dart';
+import 'package:itetsostituzioni/data/teachers.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/ui/app_bar_fix.dart';
+import 'package:itetsostituzioni/ui/dropdown_form_field.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});

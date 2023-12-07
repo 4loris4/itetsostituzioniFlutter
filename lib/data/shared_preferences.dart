@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/utils.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart' as package;
 
 class SharedPreferences {

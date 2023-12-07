@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:itet_sostituzioni/constants.dart';
-import 'package:itet_sostituzioni/main.dart';
-import 'package:itet_sostituzioni/pages/substitutions/sostituzioni_page.dart';
+import 'package:itetsostituzioni/constants.dart';
+import 'package:itetsostituzioni/main.dart';
+import 'package:itetsostituzioni/pages/substitutions/sostituzioni_page.dart';
 
 @immutable
 class Substitution {

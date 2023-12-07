@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:itet_sostituzioni/data/substitutions.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/pages/details_page.dart';
-import 'package:itet_sostituzioni/utils.dart';
+import 'package:itetsostituzioni/data/substitutions.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/pages/details_page.dart';
+import 'package:itetsostituzioni/utils.dart';
 
 class SubstitutionsTab extends ConsumerWidget {
   final Map<String, List<Substitution>> substitutions;

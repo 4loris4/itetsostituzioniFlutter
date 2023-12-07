@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:itet_sostituzioni/data/substitutions.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/pages/settings_page.dart';
-import 'package:itet_sostituzioni/pages/substitutions/my_substitutions_tab.dart';
-import 'package:itet_sostituzioni/pages/substitutions/substitutions_tab.dart';
-import 'package:itet_sostituzioni/ui/app_bar_fix.dart';
-import 'package:itet_sostituzioni/utils.dart';
+import 'package:itetsostituzioni/data/substitutions.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/pages/settings_page.dart';
+import 'package:itetsostituzioni/pages/substitutions/my_substitutions_tab.dart';
+import 'package:itetsostituzioni/pages/substitutions/substitutions_tab.dart';
+import 'package:itetsostituzioni/ui/app_bar_fix.dart';
+import 'package:itetsostituzioni/utils.dart';
 
 class SostituzioniPage extends ConsumerWidget {
   const SostituzioniPage({super.key});

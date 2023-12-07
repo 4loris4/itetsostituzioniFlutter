@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:itet_sostituzioni/data/user.dart';
+import 'package:itetsostituzioni/data/user.dart';
 
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});

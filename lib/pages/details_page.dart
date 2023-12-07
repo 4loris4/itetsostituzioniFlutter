@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:itet_sostituzioni/data/substitutions.dart';
-import 'package:itet_sostituzioni/data/user.dart';
-import 'package:itet_sostituzioni/ui/app_bar_fix.dart';
+import 'package:itetsostituzioni/data/substitutions.dart';
+import 'package:itetsostituzioni/data/user.dart';
+import 'package:itetsostituzioni/ui/app_bar_fix.dart';
 
 const List<String> timetables = ["07:50 - 08:40", "08:40 - 09:30", "09:30 - 10:20", "10:30 - 11:20", "11:20 - 12:10", "12:10 - 13:00", "13:30 - 14:20", "14:20 - 15:10", "15:10 - 16:00", "16:00 - 16:50"];
 

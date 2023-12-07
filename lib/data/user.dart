@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:itet_sostituzioni/main.dart';
+import 'package:itetsostituzioni/main.dart';
 
 late final StateNotifierProvider<UserNotifier, User> userProvider;
 

@@ -1,4 +1,4 @@
-package com.itetpilati.itetsostituzioni.itet_sostituzioni
+package com.itetpilati.itetsostituzioni
 
 import io.flutter.embedding.android.FlutterActivity
 
