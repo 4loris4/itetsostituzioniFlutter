@@ -47,37 +47,37 @@ class SubstitutionsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
     final itpNotEmpty = itp.absent.isNotEmpty || itp.covered.isNotEmpty;
-    return RefreshIndicator(
-      onRefresh: () => ref.refresh(substitutionsProvider.future),
-      child: substitutions.isNotEmpty || itpNotEmpty
-          ? ListView(
-              children: [
-                ...getSortedSubstitutions(user).map((group) {
-                  final personal = group.key == user.name;
-                  final length = group.value.length;
-                  return ListTile(
-                      title: Text(group.key),
-                      subtitle: Text("$length ${length == 1 ? "sostituzione" : "sostituzioni"}"),
-                      trailing: personal ? const Icon(Icons.person) : null,
-                      onTap: () {
-                        if (personal) {
-                          DefaultTabController.of(context).animateTo(0);
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailsPage(group.key, group.value)));
-                        }
-                      });
-                }),
-                if (itpNotEmpty) itpTile()
-              ],
-            )
-          : centeredListView(
-              Column(
-                children: [
-                  Text("Nessuna sostituzione trovata", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
-                  const Text("Non sono previste sostituzioni per questa giornata!", textAlign: TextAlign.center),
-                ],
-              ),
-            ),
+
+    if (substitutions.isNotEmpty || itpNotEmpty) {
+      return ListView(
+        children: [
+          ...getSortedSubstitutions(user).map((group) {
+            final personal = group.key == user.name;
+            final length = group.value.length;
+            return ListTile(
+                title: Text(group.key),
+                subtitle: Text("$length ${length == 1 ? "sostituzione" : "sostituzioni"}"),
+                trailing: personal ? const Icon(Icons.person) : null,
+                onTap: () {
+                  if (personal) {
+                    DefaultTabController.of(context).animateTo(0);
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailsPage(group.key, group.value)));
+                  }
+                });
+          }),
+          if (itpNotEmpty) itpTile()
+        ],
+      );
+    }
+
+    return centeredListView(
+      Column(
+        children: [
+          Text("Nessuna sostituzione trovata", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+          const Text("Non sono previste sostituzioni per questa giornata!", textAlign: TextAlign.center),
+        ],
+      ),
     );
   }
 }

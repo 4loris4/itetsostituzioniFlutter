@@ -13,11 +13,24 @@ class SubstitutionsPage extends ConsumerWidget {
   const SubstitutionsPage({super.key});
 
   static late BuildContext _snackbarContext;
+  static final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
 
   static showSnackBar(String content) {
     try {
       ScaffoldMessenger.of(_snackbarContext).showSnackBar(SnackBar(content: Text(content)));
     } catch (_) {}
+  }
+
+  static showRefreshIndicator() {
+    if (_refreshIndicatorKey.currentState?.mounted ?? false) {
+      _refreshIndicatorKey.currentState!.show();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_refreshIndicatorKey.currentState?.mounted ?? false) {
+          SubstitutionsPage._refreshIndicatorKey.currentState?.show();
+        }
+      });
+    }
   }
 
   Widget _scaffold({required BuildContext context, String title = "ITET Sostituzioni", TabBar? tabBar, required Widget body, List<Widget> bottomChildren = const []}) {
@@ -92,18 +105,23 @@ class SubstitutionsPage extends ConsumerWidget {
                   Tab(text: user.isTeacher ? "Tutte le sostituzioni" : "Tutte le classi"),
                 ],
               ),
-              body: TabBarView(
-                children: [
-                  MySubstitutionsTab(mySubstitutions),
-                  SubstitutionsTab(groupedSubstitutions, (absent: substitutionsData.itp1, covered: substitutionsData.itp2)),
-                ],
+              body: RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: () => ref.refresh(substitutionsProvider.future),
+                notificationPredicate: (notification) => notification.depth == 1,
+                child: TabBarView(
+                  children: [
+                    MySubstitutionsTab(mySubstitutions),
+                    SubstitutionsTab(groupedSubstitutions, (absent: substitutionsData.itp1, covered: substitutionsData.itp2)),
+                  ],
+                ),
               ),
               bottomChildren: [
                 if (substitutionsData.loadedFromCache)
                   Container(
                     padding: const EdgeInsets.all(2),
                     color: Colors.redAccent,
-                    child: Text("Le sostituzioni potrebbero non essere aggiornate!", style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor), textAlign: TextAlign.center),
+                    child: Text("Le sostituzioni potrebbero non essere aggiornate", style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor), textAlign: TextAlign.center),
                   ),
                 Padding(
                   padding: const EdgeInsets.all(2),

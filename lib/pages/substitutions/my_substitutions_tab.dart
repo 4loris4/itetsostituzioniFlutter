@@ -19,18 +19,15 @@ class MySubstitutionsTab extends ConsumerWidget {
     final isTeacher = user.isTeacher;
 
     if (user.name != null) {
-      return RefreshIndicator(
-        onRefresh: () => ref.refresh(substitutionsProvider.future),
-        child: mySubstitutions.isNotEmpty
-            ? DetailsPage.listView(mySubstitutions, isTeacher, user.name!)
-            : centeredListView(
-                Column(
-                  children: [
-                    Text("Nessuna sostituzione trovata", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
-                    Text("Non sono previste sostituzioni per ${isTeacher ? "te" : "la tua classe"}!", textAlign: TextAlign.center),
-                  ],
-                ),
-              ),
+      if (mySubstitutions.isNotEmpty) return DetailsPage.listView(mySubstitutions, isTeacher, user.name!);
+
+      return centeredListView(
+        Column(
+          children: [
+            Text("Nessuna sostituzione trovata", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+            Text("Non sono previste sostituzioni per ${isTeacher ? "te" : "la tua classe"}!", textAlign: TextAlign.center),
+          ],
+        ),
       );
     }
 

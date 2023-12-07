@@ -65,7 +65,15 @@ class SubstitutionsData {
   }
 }
 
-final substitutionsProvider = FutureProvider<SubstitutionsData>((ref) async {
+final FutureProvider<SubstitutionsData> substitutionsProvider = FutureProvider((ref) async {
+  if (!ref.exists(substitutionsProvider)) {
+    try {
+      final data = SubstitutionsData.fromJson(jsonDecode(prefs.substitutionsJSON!));
+      SubstitutionsPage.showRefreshIndicator();
+      return data;
+    } catch (_) {}
+  }
+
   SubstitutionsData data;
   try {
     final response = await http.get(substitutionsUrl);
