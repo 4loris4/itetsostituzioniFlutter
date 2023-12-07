@@ -33,7 +33,9 @@ flutter:
 # dart run flutter_launcher_icons
 flutter_launcher_icons:
   android: true
+  ios: true
   image_path: assets/icon/icon.png
+  image_path_ios: assets/icon/icon_ios.png
   adaptive_icon_foreground: assets/icon/adaptive_foreground.png
   adaptive_icon_background: "#FFFFFF"
 
