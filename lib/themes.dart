@@ -19,11 +19,12 @@ ThemeData get lightTheme {
       headlineMedium: TextStyle(fontWeight: FontWeight.w500),
       headlineSmall: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
     ),
+    snackBarTheme: const SnackBarThemeData(backgroundColor: Color(0xFF333333)),
   );
 }
 
 ThemeData get darkTheme {
-  final colorScheme = ColorScheme.dark(primary: Colors.blue.shade300);
+  final colorScheme = ColorScheme.dark(primary: Colors.blue.shade300, background: Colors.grey.shade900);
   final appBarTheme = AppBarTheme(backgroundColor: Colors.blueGrey.shade900, foregroundColor: Colors.white);
 
   return ThemeData(

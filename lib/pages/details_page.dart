@@ -62,7 +62,7 @@ class DetailsPage extends ConsumerWidget {
     final isTeacher = ref.watch(userProvider).isTeacher;
 
     return Scaffold(
-      appBar: AppBarFix(title: Text("Sostituzioni ${isTeacher ? "di" : "della classe"} $user")),
+      appBar: AppBarFix(title: FittedBox(child: Text("Sostituzioni ${isTeacher ? "di" : "della classe"} $user"))),
       body: listView(substitutions, isTeacher, user),
     );
   }

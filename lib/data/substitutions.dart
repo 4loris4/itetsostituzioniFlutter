@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:itetsostituzioni/constants.dart';
 import 'package:itetsostituzioni/main.dart';
-import 'package:itetsostituzioni/pages/substitutions/sostituzioni_page.dart';
+import 'package:itetsostituzioni/pages/substitutions/substitutions_page.dart';
 
 @immutable
 class Substitution {
@@ -69,14 +69,13 @@ final substitutionsProvider = FutureProvider<SubstitutionsData>((ref) async {
   SubstitutionsData data;
   try {
     final response = await http.get(substitutionsUrl);
-    /* final response = await http.get(Uri.parse("http://192.168.1.108:5500/listaPubblica.json")); */ //TODO remove, do some testing
     data = SubstitutionsData.fromJson(jsonDecode(response.body));
     prefs.setSubstitutionsJSON(response.body);
   } catch (_) {
     final savedData = prefs.substitutionsJSON;
     if (savedData == null) rethrow;
     data = SubstitutionsData.fromJson(jsonDecode(savedData), true);
-    SostituzioniPage.showSnackBar("Impossibile aggiornare le sostituzioni, riprova più tardi");
+    SubstitutionsPage.showSnackBar("Impossibile aggiornare le sostituzioni, riprova più tardi");
   }
   return data;
 });

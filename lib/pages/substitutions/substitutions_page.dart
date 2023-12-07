@@ -9,8 +9,8 @@ import 'package:itetsostituzioni/pages/substitutions/substitutions_tab.dart';
 import 'package:itetsostituzioni/ui/app_bar_fix.dart';
 import 'package:itetsostituzioni/utils.dart';
 
-class SostituzioniPage extends ConsumerWidget {
-  const SostituzioniPage({super.key});
+class SubstitutionsPage extends ConsumerWidget {
+  const SubstitutionsPage({super.key});
 
   static late BuildContext _snackbarContext;
 
@@ -76,6 +76,8 @@ class SostituzioniPage extends ConsumerWidget {
       child: provider.when(
         data: (substitutionsData) {
           final groupedSubstitutions = groupSubstitutions(substitutionsData, user);
+          final mySubstitutions = groupedSubstitutions[user.name] ?? [];
+
           return _scaffold(
               context: context,
               title: DateFormat("'Sostituzioni di' EEEE d MMMM").format(substitutionsData.data),
@@ -84,7 +86,7 @@ class SostituzioniPage extends ConsumerWidget {
                   Tab(child: FittedBox(child: Text(
                     () {
                       if (user.name == null) return user.isTeacher ? "Le mie sostituzioni" : "La mia classe";
-                      return "${user.name} ${"(${(groupedSubstitutions[user.name] ?? []).length})"}";
+                      return "${user.name} ${"(${mySubstitutions.length})"}";
                     }(),
                   ))),
                   Tab(text: user.isTeacher ? "Tutte le sostituzioni" : "Tutte le classi"),
@@ -92,7 +94,7 @@ class SostituzioniPage extends ConsumerWidget {
               ),
               body: TabBarView(
                 children: [
-                  MySubstitutionsTab(groupedSubstitutions),
+                  MySubstitutionsTab(mySubstitutions),
                   SubstitutionsTab(groupedSubstitutions, (absent: substitutionsData.itp1, covered: substitutionsData.itp2)),
                 ],
               ),

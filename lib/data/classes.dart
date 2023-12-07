@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:itetsostituzioni/constants.dart';
 import 'package:itetsostituzioni/main.dart';
-import 'package:itetsostituzioni/pages/substitutions/sostituzioni_page.dart';
+import 'package:itetsostituzioni/pages/substitutions/substitutions_page.dart';
 
 final classesProvider = FutureProvider<List<String>>((ref) async {
   List<String> data;
@@ -16,7 +16,7 @@ final classesProvider = FutureProvider<List<String>>((ref) async {
     final savedData = prefs.classesJSON;
     if (savedData == null) rethrow;
     data = List<String>.from(jsonDecode(savedData));
-    SostituzioniPage.showSnackBar("Impossibile aggiornare la lista delle classi, riprova più tardi");
+    SubstitutionsPage.showSnackBar("Impossibile aggiornare la lista delle classi, riprova più tardi");
   }
   return data;
 });

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:itetsostituzioni/data/theme.dart';
 import 'package:itetsostituzioni/data/user.dart';
 import 'package:itetsostituzioni/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart' as package;
@@ -11,10 +13,15 @@ class SharedPreferences {
   static Future<SharedPreferences> init() async {
     final prefs = SharedPreferences._(await package.SharedPreferences.getInstance());
 
+    themeProvider = StateNotifierProvider((ref) => ThemeNotifier(prefs.theme));
     userProvider = StateNotifierProvider((ref) => UserNotifier(User(prefs.userType, prefs.user)));
 
     return prefs;
   }
+
+  static const _themeKey = "theme";
+  ThemeMode get theme => inlineTry(() => ThemeMode.values[_prefs.getInt(_themeKey)!], ThemeMode.system);
+  Future<bool> setTheme(ThemeMode theme) => _prefs.setInt(_themeKey, theme.index);
 
   static const _userTypeKey = "userType";
   UserType? get userType => inlineTry(() => UserType.values[_prefs.getInt(_userTypeKey)!], null);

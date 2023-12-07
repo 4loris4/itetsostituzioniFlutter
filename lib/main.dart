@@ -4,15 +4,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:itetsostituzioni/data/shared_preferences.dart';
+import 'package:itetsostituzioni/data/theme.dart';
 import 'package:itetsostituzioni/data/user.dart';
-import 'package:itetsostituzioni/pages/substitutions/sostituzioni_page.dart';
+import 'package:itetsostituzioni/pages/substitutions/substitutions_page.dart';
 import 'package:itetsostituzioni/pages/welcome_page.dart';
 import 'package:itetsostituzioni/themes.dart';
-
-//TODO apk, aab
-//TODO timeout?
-//TODO settings theme
-//TODO check api level... (old and new app)
 
 late final SharedPreferences prefs;
 
@@ -35,11 +31,14 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
+    final theme = ref.watch(themeProvider);
+
     return MaterialApp(
       title: "ITET Sostituzioni",
+      themeMode: theme,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: user.type == null ? const WelcomePage() : const SostituzioniPage(),
+      home: user.type == null ? const WelcomePage() : const SubstitutionsPage(),
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const [Locale("it")],
     );

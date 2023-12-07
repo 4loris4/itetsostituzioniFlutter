@@ -9,9 +9,9 @@ import 'package:itetsostituzioni/pages/details_page.dart';
 import 'package:itetsostituzioni/utils.dart';
 
 class MySubstitutionsTab extends ConsumerWidget {
-  final Map<String, List<Substitution>> substitutions;
+  final List<Substitution> mySubstitutions;
 
-  const MySubstitutionsTab(this.substitutions, {super.key});
+  const MySubstitutionsTab(this.mySubstitutions, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,11 +19,9 @@ class MySubstitutionsTab extends ConsumerWidget {
     final isTeacher = user.isTeacher;
 
     if (user.name != null) {
-      final mySubstitutions = substitutions[user.name];
-
       return RefreshIndicator(
         onRefresh: () => ref.refresh(substitutionsProvider.future),
-        child: mySubstitutions != null
+        child: mySubstitutions.isNotEmpty
             ? DetailsPage.listView(mySubstitutions, isTeacher, user.name!)
             : centeredListView(
                 Column(
