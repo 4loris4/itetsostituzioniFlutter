@@ -1,3 +1,3 @@
 # ITET Sostituzioni
 
-Applicazione dell'Istituto Pilati per le sostituzioni dei professori.
+Applicazione Android e iOS dell'Istituto Pilati per le sostituzioni dei professori.
